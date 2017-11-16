@@ -73,24 +73,35 @@ public interface Hessian2Constants
   public static final int BC_FALSE = 'F'; // boolean false
   
   public static final int BC_INT = 'I'; // 32-bit int
-  
-  public static final int INT_DIRECT_MIN = -0x10;
-  public static final int INT_DIRECT_MAX = 0x2f;
-  public static final int BC_INT_ZERO = 0x90;
 
+  /** resolved -16 */
+  public static final int INT_DIRECT_MIN = -0x10;
+  /** resolved 47 */
+  public static final int INT_DIRECT_MAX = 0x2f;
+  /** resolved 144 */
+  public static final int BC_INT_ZERO = 0x90;
+  /** resolved -2048 */
   public static final int INT_BYTE_MIN = -0x800;
+  /** resolved  2047 */
   public static final int INT_BYTE_MAX = 0x7ff;
+  /** resolved 200 */
   public static final int BC_INT_BYTE_ZERO = 0xc8;
   
   public static final int BC_END = 'Z';
 
+  /** resolved -262144 */
   public static final int INT_SHORT_MIN = -0x40000;
+  /** resolved  4194303 */
   public static final int INT_SHORT_MAX = 0x3ffff;
+  /** resolved  212 */
   public static final int BC_INT_SHORT_ZERO = 0xd4;
 
+  /** resolved 85 */
   public static final int BC_LIST_VARIABLE =0x55;
   public static final int BC_LIST_FIXED = 'V';
+  /** resolved 87 */
   public static final int BC_LIST_VARIABLE_UNTYPED = 0x57;
+  /** resoved 88 */
   public static final int BC_LIST_FIXED_UNTYPED =0x58;
 
   public static final int BC_LIST_DIRECT = 0x70;

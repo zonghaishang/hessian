@@ -704,6 +704,7 @@ public class Hessian2Output
       offset = _offset;
     }
 
+    // [-16, 47]
     if (INT_DIRECT_MIN <= value && value <= INT_DIRECT_MAX)
       buffer[offset++] = (byte) (value + BC_INT_ZERO);
     else if (INT_BYTE_MIN <= value && value <= INT_BYTE_MAX) {
