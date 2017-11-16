@@ -52,22 +52,33 @@ public interface Hessian2Constants
 {
   public static final int BC_BINARY = 'B'; // final chunk
   public static final int BC_BINARY_CHUNK = 'A'; // non-final chunk
+  /** resolved 32 */
   public static final int BC_BINARY_DIRECT = 0x20; // 1-byte length binary
+  /** resolved 15 */
   public static final int BINARY_DIRECT_MAX = 0x0f;
+  /** resolved 52 */
   public static final int BC_BINARY_SHORT = 0x34; // 2-byte length binary
+  /** resolved 1023 */
   public static final int BINARY_SHORT_MAX = 0x3ff; // 0-1023 binary
 
   public static final int BC_CLASS_DEF = 'C'; // object/class definition
 
+  /** resolved 74 */
   public static final int BC_DATE = 0x4a; // 64-bit millisecond UTC date
+  /** resolved 75 */
   public static final int BC_DATE_MINUTE = 0x4b; // 32-bit minute UTC date
   
   public static final int BC_DOUBLE = 'D'; // IEEE 64-bit double
 
+  /** resolved 91 */
   public static final int BC_DOUBLE_ZERO = 0x5b;
+  /** resolved 92 */
   public static final int BC_DOUBLE_ONE = 0x5c;
+  /** resolved 93 */
   public static final int BC_DOUBLE_BYTE = 0x5d;
+  /** resolved 94 */
   public static final int BC_DOUBLE_SHORT = 0x5e;
+  /** resolved 95 */
   public static final int BC_DOUBLE_MILL = 0x5f;
   
   public static final int BC_FALSE = 'F'; // boolean false
@@ -104,23 +115,35 @@ public interface Hessian2Constants
   /** resoved 88 */
   public static final int BC_LIST_FIXED_UNTYPED =0x58;
 
+  /** resolved 112 */
   public static final int BC_LIST_DIRECT = 0x70;
+  /** resolved 120 */
   public static final int BC_LIST_DIRECT_UNTYPED = 0x78;
+  /** resolved 7 */
   public static final int LIST_DIRECT_MAX = 0x7;
 
   public static final int BC_LONG = 'L'; // 64-bit signed integer
+  /** resolved -8 */
   public static final long LONG_DIRECT_MIN = -0x08;
+  /** resolved 15 */
   public static final long LONG_DIRECT_MAX =  0x0f;
+  /** resolved 224 */
   public static final int BC_LONG_ZERO = 0xe0;
 
+  /** resolved -2048 */
   public static final long LONG_BYTE_MIN = -0x800;
+  /** resolved 2047 */
   public static final long LONG_BYTE_MAX =  0x7ff;
+  /** resolved 248 */
   public static final int BC_LONG_BYTE_ZERO = 0xf8;
 
+  /** resolved -262144 */
   public static final int LONG_SHORT_MIN = -0x40000;
+  /** resolved  262143 */
   public static final int LONG_SHORT_MAX = 0x3ffff;
+  /** resolved 60 */
   public static final int BC_LONG_SHORT_ZERO = 0x3c;
-  
+  /** resolved 89 */
   public static final int BC_LONG_INT = 0x59;
   
   public static final int BC_MAP = 'M';
@@ -130,28 +153,39 @@ public interface Hessian2Constants
   
   public static final int BC_OBJECT = 'O';
   public static final int BC_OBJECT_DEF = 'C';
-  
+
+  /** resolved 96 */
   public static final int BC_OBJECT_DIRECT = 0x60;
+  /** resolved 15 */
   public static final int OBJECT_DIRECT_MAX = 0x0f;
-  
+
+  /** resolved 81 */
   public static final int BC_REF = 0x51;
 
   public static final int BC_STRING = 'S'; // final string
   public static final int BC_STRING_CHUNK = 'R'; // non-final string
   
   public static final int BC_STRING_DIRECT = 0x00;
+  /** resolved 31 */
   public static final int STRING_DIRECT_MAX = 0x1f;
+  /** resolved 48 */
   public static final int BC_STRING_SHORT = 0x30;
+  /** resolved 1023 */
   public static final int STRING_SHORT_MAX = 0x3ff;
   
   public static final int BC_TRUE = 'T';
 
+  /** resolved 79 */
   public static final int P_PACKET_CHUNK = 0x4f;
   public static final int P_PACKET = 'P';
 
+  /** resolved 128 */
   public static final int P_PACKET_DIRECT = 0x80;
+  /** resolved 127 */
   public static final int PACKET_DIRECT_MAX = 0x7f;
 
+  /** resolved 112 */
   public static final int P_PACKET_SHORT = 0x70;
+  /** resolved 4095 */
   public static final int PACKET_SHORT_MAX = 0xfff;
 }
