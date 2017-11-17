@@ -1067,6 +1067,7 @@ public class Hessian2Output
       _buffer[_offset++] = (byte) ('N');
     }
     else {
+      // 32,768
       while (length > 0x8000) {
         int sublen = 0x8000;
 
@@ -1562,8 +1563,9 @@ public class Hessian2Output
       else if (ch < 0x800) {
         // 0000 1000 0000 0000 = 0x800
         // 0000 0000 1100 0000 = 0xc0
-        //           0001 1111 = 0x1f
-        // 0000 0111 1100 1100 = 0x7cc = 1996
+                  //110XXXXX10
+        //            00011111 = 0x1f
+        // XXX11111 XX001100 = 0x7cc = 1996, utf-8 style
         // 存储高字节后5位, 对应#2的5个X
         buffer[offset++] = (byte) (0xc0 + ((ch >> 6) & 0x1f));
         // 128 + (ch & 63), 0011 1111
@@ -1603,8 +1605,16 @@ public class Hessian2Output
 
       char ch = v[i + strOffset];
 
+
+      // Here is utf-8                                  #0
+      // U+ 0000 ~ U+ 007F: 0XXXXXXX                    #1
+      // U+ 0080 ~ U+ 07FF: 110XXXXX 10XXXXXX           #2
+      // U+ 0800 ~ U+ FFFF: 1110XXXX 10XXXXXX 10XXXXXX  #3
+
+      // < 128
       if (ch < 0x80)
         buffer[offset++] = (byte) (ch);
+      // < 2048
       else if (ch < 0x800) {
         buffer[offset++] = (byte) (0xc0 + ((ch >> 6) & 0x1f));
         buffer[offset++] = (byte) (0x80 + (ch & 0x3f));
