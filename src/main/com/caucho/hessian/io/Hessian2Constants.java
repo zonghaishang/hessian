@@ -163,6 +163,7 @@ public interface Hessian2Constants
   public static final int BC_REF = 0x51;
 
   public static final int BC_STRING = 'S'; // final string
+  /** resolved 82 , equals x52 */
   public static final int BC_STRING_CHUNK = 'R'; // non-final string
   
   public static final int BC_STRING_DIRECT = 0x00;

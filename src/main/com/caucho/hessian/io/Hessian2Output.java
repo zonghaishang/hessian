@@ -824,6 +824,7 @@ public class Hessian2Output
 
         return;
       }
+      // [-128, 127]
       else if (-0x80 <= intValue && intValue < 0x80) {
         buffer[offset++] = (byte) BC_DOUBLE_BYTE;
         buffer[offset++] = (byte) intValue;
@@ -832,6 +833,7 @@ public class Hessian2Output
 
         return;
       }
+      // [-32,768, 32,767]
       else if (-0x8000 <= intValue && intValue < 0x8000) {
         buffer[offset + 0] = (byte) BC_DOUBLE_SHORT;
         buffer[offset + 1] = (byte) (intValue >> 8);
@@ -891,11 +893,12 @@ public class Hessian2Output
     int offset = _offset;
     byte []buffer = _buffer;
 
+    // 如果是分钟的整数倍
     if (time % 60000L == 0) {
       // compact date ::= x65 b3 b2 b1 b0
 
       long minutes = time / 60000L;
-
+      // 高四位字节为0
       if ((minutes >> 31) == 0 || (minutes >> 31) == -1) {
         buffer[offset++] = (byte) BC_DATE_MINUTE;
         buffer[offset++] = ((byte) (minutes >> 24));
@@ -983,8 +986,9 @@ public class Hessian2Output
       int length = value.length();
       int strOffset = 0;
 
+      // 32,768
       while (length > 0x8000) {
-        int sublen = 0x8000;
+        int subLength = 0x8000;
 
         offset = _offset;
 
@@ -994,21 +998,21 @@ public class Hessian2Output
         }
 
         // chunk can't end in high surrogate
-        char tail = value.charAt(strOffset + sublen - 1);
+        char tail = value.charAt(strOffset + subLength - 1);
 
         if (0xd800 <= tail && tail <= 0xdbff)
-          sublen--;
+          subLength--;
 
         buffer[offset + 0] = (byte) BC_STRING_CHUNK;
-        buffer[offset + 1] = (byte) (sublen >> 8);
-        buffer[offset + 2] = (byte) (sublen);
+        buffer[offset + 1] = (byte) (subLength >> 8);
+        buffer[offset + 2] = (byte) (subLength);
 
         _offset = offset + 3;
 
-        printString(value, strOffset, sublen);
+        printString(value, strOffset, subLength);
 
-        length -= sublen;
-        strOffset += sublen;
+        length -= subLength;
+        strOffset += subLength;
       }
 
       offset = _offset;
@@ -1545,15 +1549,33 @@ public class Hessian2Output
 
       char ch = v.charAt(i + strOffset);
 
+
+      // Here is utf-8                                  #0
+      // U+ 0000 ~ U+ 007F: 0XXXXXXX                    #1
+      // U+ 0080 ~ U+ 07FF: 110XXXXX 10XXXXXX           #2
+      // U+ 0800 ~ U+ FFFF: 1110XXXX 10XXXXXX 10XXXXXX  #3
+
+      // < 128
       if (ch < 0x80)
         buffer[offset++] = (byte) (ch);
+      // < 2048
       else if (ch < 0x800) {
+        // 0000 1000 0000 0000 = 0x800
+        // 0000 0000 1100 0000 = 0xc0
+        //           0001 1111 = 0x1f
+        // 0000 0111 1100 1100 = 0x7cc = 1996
+        // 存储高字节后5位, 对应#2的5个X
         buffer[offset++] = (byte) (0xc0 + ((ch >> 6) & 0x1f));
+        // 128 + (ch & 63), 0011 1111
+        // 存储低字节后6位
         buffer[offset++] = (byte) (0x80 + (ch & 0x3f));
       }
       else {
+        // 高4位+  中6位 +  低6位
+        // 1110 0000 = 0xe0
         buffer[offset++] = (byte) (0xe0 + ((ch >> 12) & 0xf));
         buffer[offset++] = (byte) (0x80 + ((ch >> 6) & 0x3f));
+        // 0011 1111 = 0x3f
         buffer[offset++] = (byte) (0x80 + (ch & 0x3f));
       }
     }
