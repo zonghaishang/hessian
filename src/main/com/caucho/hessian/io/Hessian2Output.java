@@ -586,10 +586,12 @@ public class Hessian2Output
       if (SIZE < _offset + 32)
         flushBuffer();
 
+      // 'instance order' range [0 , 15]
       if (ref <= OBJECT_DIRECT_MAX) {
         _buffer[_offset++] = (byte) (BC_OBJECT_DIRECT + ref);
       }
       else {
+         // easy to think 'O' means 'instance order'
         _buffer[_offset++] = (byte) 'O';
         writeInt(ref);
       }
