@@ -484,10 +484,12 @@ public class Hessian2Output
 
     if (length < 0) {
       if (type != null) {
+         // variable-length list
         _buffer[_offset++] = (byte) BC_LIST_VARIABLE;
         writeType(type);
       }
       else
+         // variable-length untyped list
         _buffer[_offset++] = (byte) BC_LIST_VARIABLE_UNTYPED;
 
       return true;
@@ -1165,27 +1167,30 @@ public class Hessian2Output
       _buffer[_offset++] = (byte) 'N';
     }
     else {
+      // 如果字节数组的长度 大于 剩余buffer容量-3
+      // 处理字节长度大于buffer剩余容量
       while (SIZE - _offset - 3 < length) {
-        int sublen = SIZE - _offset - 3;
+        int subLength = SIZE - _offset - 3;
 
-        if (sublen < 16) {
+        if (subLength < 16) {
           flushBuffer();
 
-          sublen = SIZE - _offset - 3;
+          // 重新获取buffer剩余容量
+          subLength = SIZE - _offset - 3;
 
-          if (length < sublen)
-            sublen = length;
+          if (length < subLength)
+            subLength = length;
         }
 
         _buffer[_offset++] = (byte) BC_BINARY_CHUNK;
-        _buffer[_offset++] = (byte) (sublen >> 8);
-        _buffer[_offset++] = (byte) sublen;
+        _buffer[_offset++] = (byte) (subLength >> 8);
+        _buffer[_offset++] = (byte) subLength;
 
-        System.arraycopy(buffer, offset, _buffer, _offset, sublen);
-        _offset += sublen;
+        System.arraycopy(buffer, offset, _buffer, _offset, subLength);
+        _offset += subLength;
 
-        length -= sublen;
-        offset += sublen;
+        length -= subLength;
+        offset += subLength;
 
         flushBuffer();
       }
@@ -1236,20 +1241,20 @@ public class Hessian2Output
     while (length > 0) {
       flushIfFull();
 
-      int sublen = _buffer.length - _offset;
+      int subLength = _buffer.length - _offset;
 
-      if (length < sublen)
-        sublen = length;
+      if (length < subLength)
+        subLength = length;
 
       _buffer[_offset++] = BC_BINARY_CHUNK;
-      _buffer[_offset++] = (byte) (sublen >> 8);
-      _buffer[_offset++] = (byte) sublen;
+      _buffer[_offset++] = (byte) (subLength >> 8);
+      _buffer[_offset++] = (byte) subLength;
 
-      System.arraycopy(buffer, offset, _buffer, _offset, sublen);
+      System.arraycopy(buffer, offset, _buffer, _offset, subLength);
 
-     _offset += sublen;
-      length -= sublen;
-      offset += sublen;
+     _offset += subLength;
+      length -= subLength;
+      offset += subLength;
     }
   }
 
@@ -1473,6 +1478,7 @@ public class Hessian2Output
 
     int len = offset - 4;
 
+    // < 126
     if (len < 0x7e) {
       _buffer[2] = _buffer[0];
       _buffer[3] = (byte) (len);
@@ -1487,6 +1493,7 @@ public class Hessian2Output
 
     if (os == null) {
     }
+    // < 126
     else if (len < 0x7e) {
       os.write(_buffer, 2, offset - 2);
     }
